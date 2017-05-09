@@ -4,7 +4,7 @@
 
 ## Webp转换与扫描
 
-> 脚本: `webp_converter.py`
+> 脚本: [webp_converter.py](http://gitlab.alipay-inc.com/toolset/apk-optimize/blob/master/webp_converter.py)
 
 ![](http://gitlab.alipay-inc.com/toolset/apk-optimize/raw/master/arts/webp-converter.png)
 
