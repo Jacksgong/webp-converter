@@ -38,7 +38,7 @@ quality_ratio = 100
 
 # load config
 image_dir_path_re = re.compile(r'image-path: *(.*)')
-quality_ratio_re = re.compile(r'compress-ratio: *(\d*)')
+quality_ratio_re = re.compile(r'quality-ratio: *(\d*)')
 
 conf_file_path = '.webp.conf'
 if not exists(conf_file_path):
