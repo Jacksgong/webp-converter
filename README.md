@@ -6,6 +6,8 @@
 
 > 脚本: `webp_converter.py`
 
+![](http://gitlab.alipay-inc.com/toolset/apk-optimize/raw/master/arts/webp-converter.png)
+
 #### 目的
 
 1. 批量转换PNG/JPG到Webp文件
