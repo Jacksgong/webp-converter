@@ -1,0 +1,4 @@
+# 原图片的路径
+image-path: /the/origin/image/path
+# 保持的质量率，100为无损压缩, 0为最高压缩率
+quality-ratio: 100

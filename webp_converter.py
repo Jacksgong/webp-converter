@@ -100,8 +100,8 @@ failed_convert_count = 0
 if exists(swap_webp_path):
     remove(swap_webp_path)
 
-for image_file_name in listdir(path):
-    image_file_path = path + '/' + image_file_name
+for image_file_name in listdir(image_dir_path):
+    image_file_path = image_dir_path + '/' + image_file_name
     print_process('convert for ' + image_file_name)
 
     output_file_path = root + image_file_name + '.webp'
