@@ -117,6 +117,7 @@ all_reduce_size = 0
 process_file_count = 0
 failed_convert_count = 0
 scan_file_count = 0
+skip_file_count = 0
 
 if exists(swap_webp_path):
     remove(swap_webp_path)
@@ -155,6 +156,7 @@ for image_file_name in listdir(image_dir_path):
         print_process('ignore ' + image_file_name + ', reduce ' + reduce_size.__str__())
         remove(swap_webp_path)
 
+        skip_file_count += 1
         if not exists(keep_origin_path):
             makedirs(keep_origin_path)
         copyfile(image_file_path, keep_origin_path + image_file_name)
@@ -167,8 +169,13 @@ for image_file_name in listdir(image_dir_path):
 
 print '-----------------------------------------------'
 print ' '
-print colorize('Scan file count: ', fg=GREEN) + scan_file_count.__str__()
+print colorize('All files handled on: ', fg=BLUE) + root
+print ' '
+print colorize('Scan files count: ', fg=GREEN) + scan_file_count.__str__()
 print colorize('Reduce size: ', fg=GREEN) + human_bytes(all_reduce_size)
-print colorize('Convert failed count: ', fg=GREEN) + failed_convert_count.__str__()
+print colorize('Convert failed files count: ',
+               fg=GREEN) + failed_convert_count.__str__() + ' (' + convert_fail_path + ')'
+print colorize('Skip files(because the webp one is greater than origin one) count: ',
+               fg=GREEN) + skip_file_count.__str__() + ' (' + keep_origin_path + ')'
 print ' '
 print '-----------------------------------------------'
