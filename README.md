@@ -1,21 +1,17 @@
-# APK Optimize
-
-> APK包优化自动化脚本
-
-## Webp转换与扫描
+# Webp转换与扫描
 
 > 脚本: [webp_converter.py](http://gitlab.alipay-inc.com/toolset/apk-optimize/blob/master/webp_converter.py)
 
-![](http://gitlab.alipay-inc.com/toolset/apk-optimize/raw/master/arts/webp-converter.png)
+![](https://github.com/Jacksgong/webp-converter/raw/master/arts/webp-converter.png)
 
-#### 目的
+## 目的
 
 1. 批量转换PNG/JPG到Webp文件
 2. 自动忽略转换以后会变大的图片(会拷贝原图到`/webp-converted/origin/`目录)
 3. 自动忽略转换失败的图片(会拷贝原图到`/webp-converted/failed/`目录)
-4. 输出转换结果，转换完后输出结果，如: `reduce size: 2838335 from file count: 4807 failed convert file count: 3`
+4. 输出转换结果，转换完后输出结果
 
-#### 配置
+## 配置
 
 > 可以参考`.webp.conf.template`文件
 
@@ -28,7 +24,7 @@ image-path: /the/origin/image/path
 quality-ratio: 100
 ```
 
-#### 执行
+## 执行
 
 ```
 python webp_converter.py
@@ -39,4 +35,22 @@ python webp_converter.py
 
 ```
 python webp_converter.py -withClean
+```
+
+## License
+
+```
+Copyright 2017, JacksGong(https://blog.dreamtobe.cn)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ```
