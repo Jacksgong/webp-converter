@@ -42,8 +42,8 @@ quality_ratio_re = re.compile(r'compress-ratio: *(\d*)')
 
 conf_file_path = '.webp.conf'
 if not exists(conf_file_path):
-    exists(colorize(
-        'Please create .webp.conf file, and add config:\nimage-path: /the/origin/image/path\nquality-ratio:[0~100](default is 100)',
+    exit(colorize(
+        'Please create \'.webp.conf\' file, and add config:\nimage-path: /the/origin/image/path\nquality-ratio:[0~100](default is 100)',
         fg=RED))
 
 conf_file = open(conf_file_path, 'r')
@@ -65,7 +65,7 @@ for line in conf_file:
 conf_file.close()
 
 if image_dir_path is None:
-    exists(colorize(
+    exit(colorize(
         'Please create add config:\nimage-path: /the/origin/image/path', fg=RED))
 
 command_prefix = 'cwebp '
@@ -80,7 +80,7 @@ if argv.__len__() > 1:
     if value == '-withClean':
         is_clean_env = True
     else:
-        exists(colorize(
+        exit(colorize(
             "unknown arg: " + value + " only support '-withClean' to clean environment", fg=RED))
 
 root = 'webp-converted/'
@@ -120,7 +120,7 @@ for image_file_name in listdir(image_dir_path):
     if not exists(swap_webp_path):
         # convert failed!
         print_process("can't convert " + image_file_name)
-        failed_convert_count += 1;
+        failed_convert_count += 1
 
         if not exists(convert_fail_path):
             makedirs(convert_fail_path)
