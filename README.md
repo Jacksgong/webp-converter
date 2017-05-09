@@ -11,7 +11,7 @@ You can use this tool to converter batch images(png/jpg) to webp and output size
 
 ## Purpose
 
-1. Convert images from batch PNG/JPG format to Webp format
+1. Convert batch images from PNG/JPG format to Webp format
 2. WILL NOT convert images if its webp one is larger than origin one automatically(the origin one will be copy to `/webp-converted/origin/` directory)
 3. WILL NOT convert images if it is failed to convert to webp one automatically(the origin image of failed one will be copy to `/webp-converted/failed` directory)
 4. Output convert result, like how much size reduces, how many files skip convert, etc...
