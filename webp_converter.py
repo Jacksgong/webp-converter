@@ -2,7 +2,7 @@ import os
 from os import listdir, makedirs, remove, rename
 
 from os.path import getsize, exists
-from shutil import copyfile
+from shutil import copyfile, rmtree
 from sys import argv
 
 import re
@@ -111,7 +111,7 @@ swap_webp_path = root + 'swap.webp'
 if not exists(root):
     makedirs(root)
 elif is_clean_env:
-    remove(root)
+    rmtree(root)
 
 all_reduce_size = 0
 process_file_count = 0
