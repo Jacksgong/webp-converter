@@ -1,37 +1,41 @@
-# Webp转换与扫描
+# Webp Converter and Scaner
 
-> 脚本: [webp_converter.py](http://gitlab.alipay-inc.com/toolset/apk-optimize/blob/master/webp_converter.py)
+> Script: [webp_converter.py](http://gitlab.alipay-inc.com/toolset/apk-optimize/blob/master/webp_converter.py)
+
+> [中文文档](https://github.com/Jacksgong/webp-converter/blob/master/README-zh.md)
+
+You can use this tool to converter batch images(png/jpg) to webp and output size changes.
 
 ![](https://github.com/Jacksgong/webp-converter/raw/master/arts/webp-converter.png)
 
-## 目的
 
-1. 批量转换PNG/JPG到Webp文件
-2. 自动忽略转换以后会变大的图片(会拷贝原图到`/webp-converted/origin/`目录)
-3. 自动忽略转换失败的图片(会拷贝原图到`/webp-converted/failed/`目录)
-4. 输出转换结果，转换完后输出结果
+## Purpose
 
-## 配置
+1. Convert images from batch PNG/JPG format to Webp format
+2. WILL NOT convert images if its webp one is larger than origin one automatically(the origin one will be copy to `/webp-converted/origin/` directory)
+3. WILL NOT convert images if it is failed to convert to webp one automatically(the origin image of failed one will be copy to `/webp-converted/failed` directory)
+4. Output convert result, like how much size reduces, how many files skip convert, etc...
 
-> 可以参考`.webp.conf.template`文件
+## Configure
 
-在当前目录创建配置文件`.webp.conf`并输入以下配置:
+> Please refer to [.webp.conf.template] file.
+
+Please feel free to create the file with name `.webp.conf` on the current directory, and input following configuration:
 
 ```
-# 原图片的路径
+# Origin images directory path
 image-path: /the/origin/image/path
-# 保持的质量率，100为无损压缩, 0为最高压缩率
+# Quality ratio, between 0 to 100, 100 is lossless, 0 is highest compression ratio
 quality-ratio: 100
 ```
 
-## 执行
+## Use
 
 ```
-python webp_converter.py
+python python webp_converter.py
 ```
 
-默认是会断点续转，也就是转换了一半，中断了以后，下次再执行脚本会自动忽略已经转换过的(但是依然会记录统计)。
-如果需要清理本地环境，从头开始转换，带上`-withClean`参数:
+As default we will ignore some file has been converted on the `webp-converted` folder, if you want to clean it and restart convert all images, just add `-withClean` argument:
 
 ```
 python webp_converter.py -withClean
@@ -41,13 +45,10 @@ python webp_converter.py -withClean
 
 ```
 Copyright 2017, JacksGong(https://blog.dreamtobe.cn)
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
   http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.

@@ -1,4 +1,4 @@
-# 原图片的路径
+# Origin images directory path(原图片的路径)
 image-path: /the/origin/image/path
-# 保持的质量率，100为无损压缩, 0为最高压缩率
+# Quality ratio, between 0 to 100, 100 is lossless, 0 is highest compression ratio(保持的质量率，100为无损压缩, 0为最高压缩率)
 quality-ratio: 100
