@@ -107,13 +107,13 @@ for image_file_name in listdir(image_dir_path):
     output_file_path = root + image_file_name + '.webp'
     if exists(output_file_path):
         # has already converted!
-        reduce_size = size_diff(image_file_path, swap_webp_path)
+        reduce_size = size_diff(image_file_path, output_file_path)
 
         if reduce_size < 0:
-            exit('failed! ' + image_file_name + ' reduce ' + reduce_size)
+            exit('failed! ' + image_file_name + ' reduce ' + reduce_size.__str__())
 
         all_reduce_size += reduce_size
-        print_process(image_file_name + ' has already converted! reduce: ' + reduce_size)
+        print_process(image_file_name + ' has already converted! reduce: ' + reduce_size.__str__())
         continue
 
     os.system(command_prefix + image_file_path + ' -o ' + swap_webp_path)
