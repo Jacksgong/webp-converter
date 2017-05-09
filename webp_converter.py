@@ -33,6 +33,26 @@ def size_diff(left, right):
     return getsize(left) - getsize(right)
 
 
+def human_bytes(B):
+    'Return the given bytes as a human friendly KB, MB, GB, or TB string'
+    B = float(B)
+    KB = float(1024)
+    MB = float(KB ** 2)  # 1,048,576
+    GB = float(KB ** 3)  # 1,073,741,824
+    TB = float(KB ** 4)  # 1,099,511,627,776
+
+    if B < KB:
+        return '{0} {1}'.format(B, 'Bytes' if 0 == B > 1 else 'Byte')
+    elif KB <= B < MB:
+        return '{0:.2f} KB'.format(B / KB)
+    elif MB <= B < GB:
+        return '{0:.2f} MB'.format(B / MB)
+    elif GB <= B < TB:
+        return '{0:.2f} GB'.format(B / GB)
+    elif TB <= B:
+        return '{0:.2f} TB'.format(B / TB)
+
+
 image_dir_path = None
 quality_ratio = 100
 
@@ -96,12 +116,14 @@ elif is_clean_env:
 all_reduce_size = 0
 process_file_count = 0
 failed_convert_count = 0
+scan_file_count = 0
 
 if exists(swap_webp_path):
     remove(swap_webp_path)
 
 for image_file_name in listdir(image_dir_path):
     image_file_path = image_dir_path + '/' + image_file_name
+    scan_file_count += 1
     print_process('convert for ' + image_file_name)
 
     output_file_path = root + image_file_name + '.webp'
@@ -143,5 +165,10 @@ for image_file_name in listdir(image_dir_path):
     print_process('reduce ' + reduce_size.__str__() + ' because of ' + image_file_name)
     rename(swap_webp_path, output_file_path)
 
-print_process(
-    'reduce size: ' + all_reduce_size.__str__() + ' from file count: ' + process_file_count.__str__() + ' failed convert file count: ' + failed_convert_count.__str__())
+print '-----------------------------------------------'
+print ' '
+print colorize('Scan file count: ', fg=GREEN) + scan_file_count.__str__()
+print colorize('Reduce size: ', fg=GREEN) + human_bytes(all_reduce_size)
+print colorize('Convert failed count: ', fg=GREEN) + failed_convert_count.__str__()
+print ' '
+print '-----------------------------------------------'
