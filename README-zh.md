@@ -1,6 +1,6 @@
 # Webp转换与扫描
 
-> 脚本: [webp_converter.py](http://gitlab.alipay-inc.com/toolset/apk-optimize/blob/master/webp_converter.py)
+> 脚本: [webp_converter.py](https://github.com/Jacksgong/webp-converter/blob/master/webp_converter.py)
 
 > [English Doc](https://github.com/Jacksgong/webp-converter/blob/master/README.md)
 

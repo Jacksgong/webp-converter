@@ -1,6 +1,6 @@
 # Webp Converter and Scaner
 
-> Script: [webp_converter.py](http://gitlab.alipay-inc.com/toolset/apk-optimize/blob/master/webp_converter.py)
+> Script: [webp_converter.py](https://github.com/Jacksgong/webp-converter/blob/master/webp_converter.py)
 
 > [中文文档](https://github.com/Jacksgong/webp-converter/blob/master/README-zh.md)
 
