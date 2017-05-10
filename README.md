@@ -18,7 +18,7 @@ You can use this tool to converter batch images(png/jpg) to webp and output size
 
 ## Configure
 
-> Please refer to [.webp.conf.template] file.
+> Please refer to [.webp.conf.template](https://github.com/Jacksgong/webp-converter/blob/master/.webp.conf.template) file.
 
 Please feel free to create the file with name `.webp.conf` on the current directory, and input following configuration:
 
