@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/apk-optimize.iml" filepath="$PROJECT_DIR$/.idea/apk-optimize.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/webp-converter.iml" filepath="$PROJECT_DIR$/.idea/webp-converter.iml" />
     </modules>
   </component>
 </project>
