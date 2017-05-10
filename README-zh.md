@@ -24,6 +24,8 @@
 image-path: /the/origin/image/path
 # 保持的质量率，100为无损压缩, 0为最高压缩率
 quality-ratio: 100
+# 是否需要忽略带有透明像素点的图片(如果需要将这个值设为true，请确保已经在环境中安装了Pillow(pip install Pillow)
+ignore-transparency-image: [true/false]
 ```
 
 ## 执行

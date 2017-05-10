@@ -27,6 +27,8 @@ Please feel free to create the file with name `.webp.conf` on the current direct
 image-path: /the/origin/image/path
 # Quality ratio, between 0 to 100, 100 is lossless, 0 is highest compression ratio
 quality-ratio: 100
+# Whether need to ignore images which has transparency pixel on it (If you set true, please make sure has already installed 'Pillow' on your Env(pip install Pillow)
+ignore-transparency-image: [true/false]
 ```
 
 ## Use
