@@ -14,7 +14,7 @@ You can use this tool to converter batch images(png/jpg) to webp and output size
 1. Convert batch images from PNG/JPG format to Webp format
 2. WILL NOT convert images if its webp one is larger than origin one automatically(the origin one will be copy to `/webp-converted/origin/` directory)
 3. WILL NOT convert images if it is failed to convert to webp one automatically(the origin image of failed one will be copy to `/webp-converted/failed` directory)
-4. WILL NOT convert images which has transparency pixel if you want(the origin image of has-transparency-iamge will be copy to `/webp-converted/transparency` directory)
+4. You can ignore all images which has transparency pixel if you want with `ignore-transparency-image: true` config(the origin image of has-transparency-iamge will be copy to `/webp-converted/transparency` directory)
 5. Output convert result, like how much size reduces, how many files skip convert, etc...
 
 ## Configure

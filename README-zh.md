@@ -11,9 +11,8 @@
 1. 批量转换PNG/JPG到Webp文件
 2. 自动忽略转换以后会变大的图片(会拷贝原图到`/webp-converted/origin/`目录)
 3. 自动忽略转换失败的图片(会拷贝原图到`/webp-converted/failed/`目录)
-4. 如果你需要，支持不转换带有透明像素点的图片(会拷贝原图到`/webp-converted/transparency`目录)
-
-4. 输出转换结果，转换完后输出结果
+4. 如果你需要可以通过设置`ignore-trasparency-image: true`来不转换带有透明像素点的图片(会拷贝原图到`/webp-converted/transparency`目录)
+5. 输出转换结果，转换完后输出结果
 
 ## 配置
 
