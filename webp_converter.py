@@ -247,6 +247,5 @@ print colorize('Skip files(because the webp one is greater than origin one) coun
 if skip_transparency_file_count > 0:
     print colorize('Skip files(because there is transparency) count: ',
                    fg=GREEN) + skip_transparency_file_count.__str__() + ' (' + transparency_image_path + ')'
-print '-----------------------------------------------'
 print ' '
 print '-----------------------------------------------'
