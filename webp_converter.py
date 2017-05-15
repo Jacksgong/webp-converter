@@ -269,7 +269,11 @@ for subdir, dirs, files in os.walk(image_dir_path):
 
 print '-----------------------------------------------'
 print ' '
-if not replace: print colorize('All files handled on: ', fg=CYAN) + root
+if replace:
+    print colorize('Replace ' + valid_convert_file_count.__str__() + ' image files on ' + image_dir_path, fg=CYAN)
+else:
+    print colorize('All files handled on: ', fg=CYAN) + root
+
 print colorize('Consume: ', fg=CYAN) + '%ss' % (time.time() - start_time)
 print ' '
 print colorize('Scan files count: ', fg=GREEN) + scan_file_count.__str__()
