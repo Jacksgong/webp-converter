@@ -13,6 +13,7 @@
 3. 自动忽略转换失败的图片(会拷贝原图到`/webp-converted/failed/`目录)
 4. 如果你需要可以通过设置`ignore-trasparency-image: true`来不转换带有透明像素点的图片(会拷贝原图到`/webp-converted/transparency`目录)
 5. 输出转换结果，转换完后输出结果
+6. 如果你需要可以通过设置`replace: true`来自动用转换后的webp替换原图
 
 ## 配置
 
@@ -27,6 +28,8 @@ image-path: /the/origin/image/path
 quality-ratio: 100
 # 是否需要忽略带有透明像素点的图片(如果需要将这个值设为true，请确保已经在环境中安装了Pillow(pip install Pillow)
 ignore-transparency-image: [true/false]
+# 是否使用转换后的直接替换image-path提供的目录下面的图片
+replace: [true/false]
 ```
 
 ## 执行

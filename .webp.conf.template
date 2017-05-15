@@ -4,3 +4,5 @@ image-path: /the/origin/image/path
 quality-ratio: 100
 # Whether need to ignore images which has transparency pixel on it (If you set true, please make sure has already installed 'Pillow' on your Env(pip install Pillow)(是否需要忽略带有透明像素点的图片(如果需要将这个值设为true，请确保已经在环境中安装了Pillow(pip install Pillow))
 ignore-transparency-image: [true/false]
+# Whether replace the image-path files directly or not(是否使用转换后的直接替换image-path提供的目录下面的图片)
+replace: [true/false]

@@ -16,6 +16,7 @@ You can use this tool to converter batch images(png/jpg) to webp and output size
 3. WILL NOT convert images if it is failed to convert to webp one automatically(the origin image of failed one will be copied to `/webp-converted/failed` directory)
 4. You can ignore all images which has transparency pixel if you want with `ignore-transparency-image: true` config(the origin image of has-transparency-image will be copied to `/webp-converted/transparency` directory)
 5. Output convert result, like how much size reduces, how many files skip convert, etc...
+6. You can replace the images with converted-webp image automatically if you want with `replace: true` config
 
 ## Configure
 
@@ -30,6 +31,8 @@ image-path: /the/origin/image/path
 quality-ratio: 100
 # Whether need to ignore images which has transparency pixel on it (If you set true, please make sure has already installed 'Pillow' on your Env(pip install Pillow)
 ignore-transparency-image: [true/false]
+# Whether replace the image-path files directly or not
+replace: [true/false]
 ```
 
 ## Use
