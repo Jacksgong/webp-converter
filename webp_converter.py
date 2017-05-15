@@ -21,7 +21,7 @@ from os import listdir, makedirs, remove, rename
 
 from os.path import getsize, exists, join
 from shutil import copyfile, rmtree
-from sys import argv
+from sys import argv, exit
 import time
 
 import re
@@ -71,6 +71,8 @@ def human_bytes(B):
     elif TB <= B:
         return '{0:.2f} TB'.format(B / TB)
 
+def resource_path(relative_path):
+    return join(sys._MEIPASS, relative_path) if hasattr(sys, '_MEIPASS') else relative_path
 
 def convert(image_file_path, image_file_name, webp_file_path):
     # whether has already converted
@@ -177,7 +179,7 @@ if image_dir_path is None:
     exit(colorize(
         'Please create add config:\nimage-path: /the/origin/image/path', fg=RED))
 
-command_prefix = 'cwebp '
+command_prefix = '%s ' % resource_path('cwebp')
 if quality_ratio >= 100:
     command_prefix += '-lossless -q 100 '
 else:
