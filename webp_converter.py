@@ -19,14 +19,14 @@ limitations under the License.
 import os
 from os import listdir, makedirs, remove, rename
 
-from os.path import getsize, exists
+from os.path import getsize, exists, join
 from shutil import copyfile, rmtree
 from sys import argv
 import time
 
 import re
 
-__version__ = '2.0.0'
+__version__ = '3.0.0'
 __author__ = 'JacksGong'
 
 RESET = '\033[0m'
@@ -72,21 +72,77 @@ def human_bytes(B):
         return '{0:.2f} TB'.format(B / TB)
 
 
+def convert(image_file_path, image_file_name, webp_file_path):
+    # whether has already converted
+    if exists(webp_file_path):
+        # has already converted!
+        reduce_size = size_diff(image_file_path, webp_file_path)
+
+        if reduce_size < 0:
+            remove(webp_file_path)
+            print_process(
+                image_file_name + ' has already converted, but it larger than origin-image: ' + reduce_size.__str__() + ' so, remove it and re-convert it!')
+        else:
+            print_process(image_file_name + ' has already converted! reduce: ' + reduce_size.__str__())
+            return RESULT_ALREADY_EXIST, reduce_size
+
+    # transparency
+    if ignore_transparency_image and image_file_name.endswith('.png'):
+        from PIL import Image
+
+        try:
+            img = Image.open(image_file_path, 'r')
+        except IOError:
+            print_process("NOT convert " + image_file_name + ' because convert failed!')
+            return RESULT_FAILED, 0
+
+        if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
+            alpha = img.convert('RGBA').split()[-1]
+            for pixel in alpha.getdata():
+                if pixel < 255:
+                    print_process('NOT convert ' + image_file_name + ' because there is alpha[' + pixel.__str__() + ']')
+                    return RESULT_WITH_TRANSPARENCY, 0
+
+    print_process('convert for ' + image_file_name)
+
+    os.system(command_prefix + image_file_path + ' -o ' + swap_webp_path)
+    # whether convert failed
+    if not exists(swap_webp_path):
+        # convert failed!
+        print_process("NOT convert " + image_file_name + ' because convert failed!')
+        return RESULT_FAILED, 0
+
+    reduce_size = size_diff(image_file_path, swap_webp_path)
+    if reduce_size < 0:
+        # invalid convert
+        print_process('NOT convert ' + image_file_name + ' because the webp one is larger: ' + (-reduce_size).__str__())
+        remove(swap_webp_path)
+        return RESULT_WEBP_LARGER, 0
+
+    print_process('convert ' + image_file_name + ' and reduce size: ' + reduce_size.__str__())
+    rename(swap_webp_path, webp_file_path)
+    if exists(swap_webp_path): remove(swap_webp_path)
+    return RESULT_SUCCESS, reduce_size
+
+
+# ==================================
 start_time = time.time()
 
 image_dir_path = None
 quality_ratio = 100
 ignore_transparency_image = False
+replace = False
 
 # load config
 image_dir_path_re = re.compile(r'image-path: *(.*)')
 quality_ratio_re = re.compile(r'quality-ratio: *(\d*)')
 ignore_transparency_re = re.compile(r'ignore-transparency-image: *(.*)')
+replace_re = re.compile(r'replace: *(.*)')
 
 conf_file_path = '.webp.conf'
 if not exists(conf_file_path):
     exit(colorize(
-        'Please create \'.webp.conf\' file, and add config:\nimage-path: /the/origin/image/path\nquality-ratio:[0~100](default is 100)\nignore-transparency-image: [true/false]',
+        'Please create \'.webp.conf\' file, and add config:\nimage-path: /the/origin/image/path\nquality-ratio:[0~100](default is 100)\nignore-transparency-image: [true/false]\nreplace: [true/false]',
         fg=RED))
 
 conf_file = open(conf_file_path, 'r')
@@ -109,7 +165,12 @@ for line in conf_file:
         ignore_transparency_image = ignore_transparency_process.groups()[0] == 'true'
         continue
 
-    print colorize('unknown config ' + line, fg=YELLOW)
+    replace_process = replace_re.search(line)
+    if replace_process is not None:
+        replace = replace_process.groups()[0] == 'true'
+        continue
+
+    exit(colorize('unknown config ' + line, fg=YELLOW))
 conf_file.close()
 
 if image_dir_path is None:
@@ -126,6 +187,10 @@ is_clean_env = False
 if argv.__len__() > 1:
     value = argv[1]
     if value == '-withClean':
+        if replace:
+            exit(colorize(
+                "can't clean the origin environment: can't withClean for replace mode, please remove 'replace' profile on .webp.conf or not execute with '-withClean' param",
+                fg=RED))
         is_clean_env = True
     else:
         exit(colorize(
@@ -152,106 +217,70 @@ skip_transparency_file_count = 0
 if exists(swap_webp_path):
     remove(swap_webp_path)
 
+RESULT_SUCCESS = 0
+RESULT_FAILED = -1
+RESULT_WEBP_LARGER = -2
+RESULT_WITH_TRANSPARENCY = -3
+RESULT_ALREADY_EXIST = -4
 
-def handle_failed(_file_path, _file_name):
-    print_process("NOT convert " + image_file_name + ' because convert failed!')
-    if not exists(convert_fail_path):
-        makedirs(convert_fail_path)
-    copyfile(_file_path, convert_fail_path + _file_name)
+for subdir, dirs, files in os.walk(image_dir_path):
+    for file_name in files:
+        if file_name == '.DS_Store':
+            continue
+        if not file_name.endswith('.jpg') and not file_name.endswith('.png'):
+            continue
 
+        scan_file_count += 1
+        input_file_path = join(subdir, file_name)
+        output_file_name = file_name.rsplit('.', 1)[0] + '.webp'
+        if replace:
+            output_file_path = join(subdir, output_file_name)
+        else:
+            output_file_path = join(root, output_file_name)
 
-for image_file_name in listdir(image_dir_path):
-    if image_file_name == '.DS_Store':
-        continue
-
-    if not image_file_name.endswith('.jpg') and not image_file_name.endswith('.png'):
-        continue
-
-    image_file_path = image_dir_path + '/' + image_file_name
-    scan_file_count += 1
-
-    output_file_path = root + image_file_name + '.webp'
-    if exists(output_file_path):
-        # has already converted!
-        reduce_size = size_diff(image_file_path, output_file_path)
-
-        if reduce_size < 0:
-            exit('failed! ' + image_file_name + ' reduce ' + reduce_size.__str__())
-
-        all_reduce_size += reduce_size
-        print_process(image_file_name + ' has already converted! reduce: ' + reduce_size.__str__())
-        continue
-
-    if ignore_transparency_image and image_file_name.endswith('.png'):
-        from PIL import Image
-
-        try:
-            img = Image.open(image_file_path, 'r')
-        except IOError:
+        result, reduce_size = convert(input_file_path, file_name, output_file_path)
+        if reduce_size > 0:
+            all_reduce_size += reduce_size
+            if result != RESULT_ALREADY_EXIST:
+                valid_convert_file_count += 1
+        elif RESULT_FAILED:
             failed_convert_count += 1
-            handle_failed(image_file_path, image_file_name)
-            continue
-
-        has_transparency = False
-        if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
-            alpha = img.convert('RGBA').split()[-1]
-
-            for value in alpha.getdata():
-                if value < 255:
-                    print_process('NOT convert ' + image_file_name + ' because there is alpha[' + value.__str__() + ']')
-                    has_transparency = True
-                    break
-
-        if has_transparency:
-            if not exists(transparency_image_path):
-                makedirs(transparency_image_path)
-
+        elif RESULT_WEBP_LARGER:
+            skip_file_count += 1
+        elif result == RESULT_WITH_TRANSPARENCY:
             skip_transparency_file_count += 1
-            copyfile(image_file_path, transparency_image_path + image_file_name)
-            continue
 
-    print_process('convert for ' + image_file_name)
-
-    os.system(command_prefix + image_file_path + ' -o ' + swap_webp_path)
-    if not exists(swap_webp_path):
-        # convert failed!
-        failed_convert_count += 1
-        handle_failed(image_file_path, image_file_name)
-        continue
-
-    reduce_size = size_diff(image_file_path, swap_webp_path)
-    if reduce_size < 0:
-        # invalid convert
-        print_process('NOT convert ' + image_file_name + ' because the webp one is larger: ' + (-reduce_size).__str__())
-        remove(swap_webp_path)
-
-        skip_file_count += 1
-        if not exists(keep_origin_path):
-            makedirs(keep_origin_path)
-        copyfile(image_file_path, keep_origin_path + image_file_name)
-        continue
-
-    valid_convert_file_count += 1
-    all_reduce_size += reduce_size
-    print_process('convert ' + image_file_name + ' and reduce size: ' + reduce_size.__str__())
-    rename(swap_webp_path, output_file_path)
-
-    if exists(swap_webp_path): remove(swap_webp_path)
+        if replace:
+            if reduce_size > 0:
+                remove(input_file_path)
+        else:
+            if result == RESULT_WITH_TRANSPARENCY:
+                if not exists(transparency_image_path):
+                    makedirs(transparency_image_path)
+                copyfile(input_file_path, transparency_image_path + file_name)
+            elif result == RESULT_FAILED:
+                if not exists(convert_fail_path):
+                    makedirs(convert_fail_path)
+                copyfile(input_file_path, convert_fail_path + file_name)
+            elif result == RESULT_WEBP_LARGER:
+                if not exists(keep_origin_path):
+                    makedirs(keep_origin_path)
+                copyfile(input_file_path, keep_origin_path + file_name)
 
 print '-----------------------------------------------'
 print ' '
-print colorize('All files handled on: ', fg=CYAN) + root
+if not replace: print colorize('All files handled on: ', fg=CYAN) + root
 print colorize('Consume: ', fg=CYAN) + '%ss' % (time.time() - start_time)
 print ' '
 print colorize('Scan files count: ', fg=GREEN) + scan_file_count.__str__()
 print colorize('Converted files count: ', fg=GREEN) + valid_convert_file_count.__str__()
 print colorize('Reduce size: ', fg=GREEN) + human_bytes(all_reduce_size)
 print colorize('Skip files(because convert failed) count: ',
-               fg=GREEN) + failed_convert_count.__str__() + ' (' + convert_fail_path + ')'
+               fg=GREEN) + failed_convert_count.__str__()
 print colorize('Skip files(because the webp one is greater than origin one) count: ',
-               fg=GREEN) + skip_file_count.__str__() + ' (' + keep_origin_path + ')'
+               fg=GREEN) + skip_file_count.__str__()
 if skip_transparency_file_count > 0:
     print colorize('Skip files(because there is transparency) count: ',
-                   fg=GREEN) + skip_transparency_file_count.__str__() + ' (' + transparency_image_path + ')'
+                   fg=GREEN) + skip_transparency_file_count.__str__()
 print ' '
 print '-----------------------------------------------'
