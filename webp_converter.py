@@ -22,12 +22,9 @@ from os import listdir, makedirs, remove, rename
 from os.path import getsize, exists
 from shutil import copyfile, rmtree
 from sys import argv
+import time
 
 import re
-
-import operator
-
-import itertools
 
 __version__ = '2.0.0'
 __author__ = 'JacksGong'
@@ -74,6 +71,8 @@ def human_bytes(B):
     elif TB <= B:
         return '{0:.2f} TB'.format(B / TB)
 
+
+start_time = time.time()
 
 image_dir_path = None
 quality_ratio = 100
@@ -165,6 +164,9 @@ for image_file_name in listdir(image_dir_path):
     if image_file_name == '.DS_Store':
         continue
 
+    if not image_file_name.endswith('.jpg') and not image_file_name.endswith('.png'):
+        continue
+
     image_file_path = image_dir_path + '/' + image_file_name
     scan_file_count += 1
 
@@ -209,6 +211,7 @@ for image_file_name in listdir(image_dir_path):
             continue
 
     print_process('convert for ' + image_file_name)
+
     os.system(command_prefix + image_file_path + ' -o ' + swap_webp_path)
     if not exists(swap_webp_path):
         # convert failed!
@@ -233,9 +236,12 @@ for image_file_name in listdir(image_dir_path):
     print_process('convert ' + image_file_name + ' and reduce size: ' + reduce_size.__str__())
     rename(swap_webp_path, output_file_path)
 
+    if exists(swap_webp_path): remove(swap_webp_path)
+
 print '-----------------------------------------------'
 print ' '
-print colorize('All files handled on: ', fg=BLUE) + root
+print colorize('All files handled on: ', fg=CYAN) + root
+print colorize('Consume: ', fg=CYAN) + '%ss' % (time.time() - start_time)
 print ' '
 print colorize('Scan files count: ', fg=GREEN) + scan_file_count.__str__()
 print colorize('Converted files count: ', fg=GREEN) + valid_convert_file_count.__str__()
