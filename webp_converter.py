@@ -72,8 +72,7 @@ def human_bytes(B):
         return '{0:.2f} TB'.format(B / TB)
 
 def resource_path(relative_path):
-    base_dir = sys._MEIPASS if hasattr(sys, '_MEIPASS') else relative_path
-    return join(base_dir, relative_path)
+    return join(sys._MEIPASS, relative_path) if hasattr(sys, '_MEIPASS') else relative_path
 
 def convert(image_file_path, image_file_name, webp_file_path):
     # whether has already converted
