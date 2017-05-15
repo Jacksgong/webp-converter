@@ -21,7 +21,7 @@ from os import listdir, makedirs, remove, rename
 
 from os.path import getsize, exists, join
 from shutil import copyfile, rmtree
-from sys import argv
+from sys import argv, exit
 import time
 
 import re
