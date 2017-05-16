@@ -26,6 +26,8 @@ import time
 
 import re
 
+import sys
+
 __version__ = '3.0.0'
 __author__ = 'JacksGong'
 
