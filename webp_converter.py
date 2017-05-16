@@ -1,6 +1,6 @@
 #!/usr/bin/python -u
 
-'''
+"""
 Copyright 2017, JacksGong(https://blog.dreamtobe.cn)
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,16 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-'''
+"""
 
 import os
-from os import listdir, makedirs, remove, rename
-
+import re
+import sys
+import time
+from os import makedirs, remove, rename
 from os.path import getsize, exists, join
 from shutil import copyfile, rmtree
 from sys import argv, exit
-import time
-
-import re
-
-import sys
 
 __version__ = '3.0.0'
 __author__ = 'JacksGong'
@@ -55,7 +52,7 @@ def size_diff(left, right):
 
 
 def human_bytes(B):
-    'Return the given bytes as a human friendly KB, MB, GB, or TB string'
+    """Return the given bytes as a human friendly KB, MB, GB, or TB string"""
     B = float(B)
     KB = float(1024)
     MB = float(KB ** 2)  # 1,048,576
@@ -73,22 +70,25 @@ def human_bytes(B):
     elif TB <= B:
         return '{0:.2f} TB'.format(B / TB)
 
+
 def resource_path(relative_path):
+    # noinspection PyProtectedMember
     return join(sys._MEIPASS, relative_path) if hasattr(sys, '_MEIPASS') else relative_path
+
 
 def convert(image_file_path, image_file_name, webp_file_path):
     # whether has already converted
     if exists(webp_file_path):
         # has already converted!
-        reduce_size = size_diff(image_file_path, webp_file_path)
+        _reduce_size = size_diff(image_file_path, webp_file_path)
 
-        if reduce_size < 0:
+        if _reduce_size < 0:
             remove(webp_file_path)
             print_process(
-                image_file_name + ' has already converted, but it larger than origin-image: ' + reduce_size.__str__() + ' so, remove it and re-convert it!')
+                image_file_name + ' has already converted, but it larger than origin-image: ' + _reduce_size.__str__() + ' so, remove it and re-convert it!')
         else:
-            print_process(image_file_name + ' has already converted! reduce: ' + reduce_size.__str__())
-            return RESULT_ALREADY_EXIST, reduce_size
+            print_process(image_file_name + ' has already converted! reduce: ' + _reduce_size.__str__())
+            return RESULT_ALREADY_EXIST, _reduce_size
 
     # transparency
     if ignore_transparency_image and image_file_name.endswith('.png'):
@@ -116,17 +116,18 @@ def convert(image_file_path, image_file_name, webp_file_path):
         print_process("NOT convert " + image_file_name + ' because convert failed!')
         return RESULT_FAILED, 0
 
-    reduce_size = size_diff(image_file_path, swap_webp_path)
-    if reduce_size < 0:
+    _reduce_size = size_diff(image_file_path, swap_webp_path)
+    if _reduce_size < 0:
         # invalid convert
-        print_process('NOT convert ' + image_file_name + ' because the webp one is larger: ' + (-reduce_size).__str__())
+        print_process(
+            'NOT convert ' + image_file_name + ' because the webp one is larger: ' + (-_reduce_size).__str__())
         remove(swap_webp_path)
         return RESULT_WEBP_LARGER, 0
 
-    print_process('convert ' + image_file_name + ' and reduce size: ' + reduce_size.__str__())
+    print_process('convert ' + image_file_name + ' and reduce size: ' + _reduce_size.__str__())
     rename(swap_webp_path, webp_file_path)
     if exists(swap_webp_path): remove(swap_webp_path)
-    return RESULT_SUCCESS, reduce_size
+    return RESULT_SUCCESS, _reduce_size
 
 
 # ==================================
