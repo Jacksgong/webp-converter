@@ -24,21 +24,27 @@ You can use this tool to converter batch images(png/jpg) to webp and output size
 
 Please feel free to create the file with name `.webp.conf` on the current directory, and input following configuration:
 
-```
+```yml
 # Origin images directory path
 image-path: /the/origin/image/path
+
 # Quality ratio, between 0 to 100, 100 is lossless, 0 is highest compression ratio
+# default value is 100.
 quality-ratio: 100
-# Whether need to ignore images which has transparency pixel on it (If you set true, please make sure has already installed 'Pillow' on your Env(pip install Pillow)
+
+# Whether need to ignore images which has transparency pixel on it (If you set true,
+# please make sure has already installed 'Pillow' on your Env(pip install Pillow),
+# default value is false.
 ignore-transparency-image: [true/false]
-# Whether replace the image-path files directly or not
+
+# Whether replace the image-path files directly or not, default value is false.
 replace: [true/false]
 ```
 
 ## Use
 
 ```
-python python webp_converter.py
+python webp_converter.py
 ```
 
 As default we will ignore some file has been converted on the `webp-converted` folder, if you want to clean it and restart convert all images, just add `-withClean` argument:

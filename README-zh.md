@@ -21,14 +21,21 @@
 
 在当前目录创建配置文件`.webp.conf`并输入以下配置:
 
-```
+```yml
 # 原图片的路径
 image-path: /the/origin/image/path
+
 # 保持的质量率，100为无损压缩, 0为最高压缩率
+# 默认值: 100
 quality-ratio: 100
-# 是否需要忽略带有透明像素点的图片(如果需要将这个值设为true，请确保已经在环境中安装了Pillow(pip install Pillow)
+
+# 是否需要忽略带有透明像素点的图片(如果需要将这个值设为true，
+# 请确保已经在环境中安装了Pillow(pip install Pillow)
+# 默认值: 100
 ignore-transparency-image: [true/false]
-# 是否使用转换后的直接替换image-path提供的目录下面的图片
+
+# 是否使用转换后的直接替换image-path提供的目录下面的图片，
+# 默认值: 100
 replace: [true/false]
 ```
 
