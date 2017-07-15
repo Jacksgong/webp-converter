@@ -41,14 +41,14 @@ replace: [true/false]
 
 ## 执行
 
-```
+```shell
 python webp_converter.py
 ```
 
 默认是会断点续转，也就是转换了一半，中断了以后，下次再执行脚本会自动忽略已经转换过的(但是依然会记录统计)。
 如果需要清理本地环境，从头开始转换，带上`-withClean`参数:
 
-```
+```shell
 python webp_converter.py -withClean
 ```
 

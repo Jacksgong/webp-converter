@@ -43,13 +43,13 @@ replace: [true/false]
 
 ## Use
 
-```
+```shell
 python webp_converter.py
 ```
 
 As default we will ignore some file has been converted on the `webp-converted` folder, if you want to clean it and restart convert all images, just add `-withClean` argument:
 
-```
+```shell
 python webp_converter.py -withClean
 ```
 
