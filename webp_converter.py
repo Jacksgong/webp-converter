@@ -248,9 +248,9 @@ for subdir, dirs, files in os.walk(image_dir_path):
             all_reduce_size += reduce_size
             if result != RESULT_ALREADY_EXIST:
                 valid_convert_file_count += 1
-        elif RESULT_FAILED:
+        elif result == RESULT_FAILED:
             failed_convert_count += 1
-        elif RESULT_WEBP_LARGER:
+        elif result == RESULT_WEBP_LARGER:
             skip_file_count += 1
         elif result == RESULT_WITH_TRANSPARENCY:
             skip_transparency_file_count += 1
