@@ -1,4 +1,6 @@
 /.idea/misc.xml
 /.idea/workspace.xml
 /.webp.conf
-/webp-converted
+/dist
+/webp_converter.egg-info
+/build
