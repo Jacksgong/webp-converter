@@ -1,4 +1,4 @@
-# Webp Converter and Scanner
+# Webp Converter and Analytics
 
 ![](https://img.shields.io/badge/webp-batch%20converter-orange.svg)
 ![](https://img.shields.io/badge/webp-batch%20analytics-orange.svg)
