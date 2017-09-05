@@ -1,6 +1,6 @@
-# Webp Converter and Scaner
+# Webp Converter and Scanner
 
-> Script: [webp_converter.py](https://github.com/Jacksgong/webp-converter/blob/master/webp_converter.py)
+An powerful webp batch converter and differ analytics
 
 > [中文文档](https://github.com/Jacksgong/webp-converter/blob/master/README-zh.md)
 
@@ -12,51 +12,63 @@ You can use this tool to converter batch images(png/jpg) to webp and output size
 ## Purpose
 
 1. Convert batch images from PNG/JPG format to Webp format
-2. WILL NOT convert images if its webp one is larger than origin one automatically(the origin one will be copied to `/webp-converted/origin/` directory)
-3. WILL NOT convert images if it is failed to convert to webp one automatically(the origin image of failed one will be copied to `/webp-converted/failed` directory)
-4. You can ignore all images which has transparency pixel if you want with `ignore-transparency-image: true` config(the origin image of has-transparency-image will be copied to `/webp-converted/transparency` directory)
+2. WILL NOT convert images if its webp one is larger than origin one automatically(the origin one will be copied to `[output-directory]/origin/` directory)
+3. WILL NOT convert images if it is failed to convert to webp one automatically(the origin image of failed one will be copied to `[output-directory]/failed` directory)
+4. You can ignore all images which has transparency pixel if you want with `--ignore-transparency-image` config(the origin image of has-transparency-image will be copied to `/webp-converted/transparency` directory)
 5. Output convert result, like how much size reduces, how many files skip convert, etc...
 6. You can replace the images with converted-webp image automatically if you want with `replace: true` config
 
-## Configure
+## Install
 
-> Please refer to [.webp.conf.template](https://github.com/Jacksgong/webp-converter/blob/master/.webp.conf.template) file.
-
-Please feel free to create the file with name `.webp.conf` on the current directory, and input following configuration:
-
-```yml
-# Origin images directory path
-image-path: /the/origin/image/path
-
-# Quality ratio, between 0 to 100, 100 is lossless, 0 is highest compression ratio
-# default value is 100.
-quality-ratio: 100
-
-# Whether need to ignore images which has transparency pixel on it (If you set true,
-# please make sure has already installed 'Pillow' on your Env(pip install Pillow),
-# default value is false.
-ignore-transparency-image: [true/false]
-
-# Whether replace the image-path files directly or not, default value is false.
-replace: [true/false]
+```shell
+brew install webp
+pip install webp-converter
 ```
 
 ## Use
 
+![](https://github.com/Jacksgong/webp-converter/raw/master/arts/help.png)
+
+#### Example
+
+If you just want to convert all images on the current files when it can be smaller after converted and **replace** the origin one:
+
 ```shell
-python webp_converter.py
+webpc --r
 ```
 
-As default we will ignore some file has been converted on the `webp-converted` folder, if you want to clean it and restart convert all images, just add `-withClean` argument:
+![](https://github.com/Jacksgong/webp-converter/raw/master/arts/demo-1.png)
+
+
+If you just want to convert all images on the current folder and with **quality-ratio** to `70` and **output** to `~/Downloads/test-converted` when it can be smaller after converted:
 
 ```shell
-python webp_converter.py -withClean
+webpc -q=70 -o=~/Downloads/test-converted/
 ```
+
+![](https://github.com/Jacksgong/webp-converter/raw/master/arts/demo-2.png)
+
+
+If you just want to convert all images on the current folder and with **clean** the `webp-converted` folder if it exist and with **quality-ratio** to `95` and **output** to `./webp-converted` and **ignore images when it has transparency** on it when it can be smaller after converted:
+
+```shell
+webpc --c --ignore-transparency-image -q=95
+```
+![](https://github.com/Jacksgong/webp-converter/raw/master/arts/demo-3.png)
+
+If you want to convert all **images on** `~/Downloads/img/test` folder and **output** converted result to `~/Downloads/test-converted` folder and only converted origin images when it isn't has **same name** `.webp` file on `~/Downloads/test-converted` folder(just not with `--c` argument) when it can be smaller after converted:
+
+
+```shell
+webpc -o=~/Downloads/test-converted/ ~/Downloads/img/test
+```
+
+![](https://github.com/Jacksgong/webp-converter/raw/master/arts/demo-4.png)
 
 ## License
 
 ```
-Copyright 2017, JacksGong(https://blog.dreamtobe.cn)
+Copyright 2017, JacksGong(https://jacksgong.com)
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
