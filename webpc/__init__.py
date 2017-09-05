@@ -42,7 +42,7 @@ print("-------------------------------------------------------")
 def main():
     default_output_directory = "%s/%s" % (os.getcwd(), 'webp-converted/')
     parser = argparse.ArgumentParser(description='Converter and analytics batch of images(png/jpg) to webp')
-    parser.add_argument('image_directory', nargs='*', default=os.getcwd(), help='Origin images directory path')
+    parser.add_argument('image_directory', nargs='*', default=[os.getcwd()], help='Origin images directory path')
     parser.add_argument('-q', '--quality-ratio', dest='quality_ratio', type=int, default=100,
                         help='Quality ratio, between 0 to 100, 100 is lossless, 0 is highest compression ratio, default value is 100')
     parser.add_argument('-o', '--output-directory', dest='output_directory',
@@ -61,7 +61,7 @@ def main():
 
     start_time = time.time()
 
-    input_directory = handle_home_case(args.image_directory)
+    input_directory = handle_home_case(args.image_directory[0])
     output_directory = handle_home_case(args.output_directory)
     quality_ratio = args.quality_ratio
     ignore_transparency_image = args.ignore_transparency_image
@@ -90,13 +90,13 @@ def main():
     keep_origin_path = output_directory + 'origin/'
     convert_fail_path = output_directory + 'failed/'
     transparency_image_path = output_directory + 'transparency/'
-    swap_webp_path = output_directory + 'swap.webp'
+    swap_webp_path = join(output_directory, 'swap.webp') if not replace_origin else join(input_directory, 'swap.webp')
 
     if clean_env and exists(output_directory):
         rmtree(output_directory)
         print "clear all env on " + output_directory
 
-    if not exists(output_directory):
+    if not replace_origin and not exists(output_directory):
         makedirs(output_directory)
 
     all_reduce_size = 0
