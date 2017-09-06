@@ -24,9 +24,10 @@ from shutil import rmtree
 from sys import exit
 
 from converter import Converter, RESULT_ALREADY_EXIST, RESULT_FAILED, RESULT_WEBP_LARGER, RESULT_WITH_TRANSPARENCY
-from helper import print_blue, resource_path, colorize, CYAN, GREEN, human_bytes, copyfile_safe, handle_home_case
+from helper import print_blue, resource_path, colorize, CYAN, GREEN, human_bytes, copyfile_safe, handle_home_case, \
+    print_warn
 
-__version__ = '4.0.0'
+__version__ = '4.0.1'
 __author__ = 'JacksGong'
 
 print("-------------------------------------------------------")
@@ -99,6 +100,40 @@ def main():
     if not replace_origin and not exists(output_directory):
         makedirs(output_directory)
 
+    if exists(swap_webp_path):
+        remove(swap_webp_path)
+
+    output_data = OutputData()
+    try:
+        loop(
+            input_directory=input_directory,
+            output_directory=output_directory,
+            swap_webp_path=swap_webp_path,
+            transparency_image_path=transparency_image_path,
+            quality_ratio=quality_ratio,
+            convert_fail_path=convert_fail_path,
+            keep_origin_path=keep_origin_path,
+            ignore_transparency_image=ignore_transparency_image,
+            is_debug=is_debug,
+            replace_origin=replace_origin,
+            output_data=output_data
+        )
+    except KeyboardInterrupt:
+        print ''
+        print 'INTERRUPT BY USER.'
+        if exists(swap_webp_path):
+            remove(swap_webp_path)
+        pass
+
+    output_data.dump(
+        replace_origin=replace_origin,
+        input_directory=input_directory,
+        output_directory=output_directory,
+        start_time=start_time
+    )
+
+
+class OutputData:
     all_reduce_size = 0
     valid_convert_file_count = 0
     failed_convert_count = 0
@@ -106,11 +141,39 @@ def main():
     skip_file_count = 0
     skip_transparency_file_count = 0
 
-    if exists(swap_webp_path):
-        remove(swap_webp_path)
+    def __init__(self):
+        pass
 
+    def dump(self, replace_origin, input_directory, output_directory, start_time):
+        print '-----------------------------------------------'
+        print ' '
+        if replace_origin:
+            colorize('Replace %s image files on %s' % (self.valid_convert_file_count, input_directory),
+                     fg=CYAN)
+        else:
+            print get_result('All files handled on: ', output_directory, fg=CYAN)
+
+        print get_result('Consume: ', (time.time() - start_time), _format='%s%.3fs', fg=CYAN)
+        print ' '
+        print get_result('Scan files count: ', self.scan_file_count)
+        print get_result('Converted files count: ', self.valid_convert_file_count)
+        print get_result('Reduce size: ', human_bytes(self.all_reduce_size))
+        print get_result('Skip files(because convert failed) count: ', self.failed_convert_count)
+        print get_result('Skip files(because the webp one is greater than origin one) count: ', self.skip_file_count)
+        if self.skip_transparency_file_count > 0:
+            print get_result('Skip files(because there is transparency) count: ', self.skip_transparency_file_count)
+        print ' '
+        print '-----------------------------------------------'
+
+
+def get_result(title, message, _format='%s%s', fg=GREEN):
+    return _format % (colorize(title, fg=fg), message)
+
+
+def loop(input_directory, output_directory, swap_webp_path, transparency_image_path, quality_ratio, convert_fail_path,
+         keep_origin_path, ignore_transparency_image, is_debug,
+         replace_origin, output_data):
     handler = Converter(swap_webp_path, quality_ratio)
-
     for subdir, dirs, files in os.walk(input_directory):
         for file_name in files:
             if file_name == '.DS_Store':
@@ -121,7 +184,7 @@ def main():
             if output_directory in subdir:
                 continue
 
-            scan_file_count += 1
+            output_data.scan_file_count += 1
             input_file_path = join(subdir, file_name)
             output_file_name = file_name.rsplit('.', 1)[0] + '.webp'
             if replace_origin:
@@ -132,15 +195,15 @@ def main():
             result, reduce_size = handler.convert(ignore_transparency_image, input_file_path, file_name,
                                                   output_file_path, is_debug)
             if reduce_size > 0:
-                all_reduce_size += reduce_size
+                output_data.all_reduce_size += reduce_size
                 if result != RESULT_ALREADY_EXIST:
-                    valid_convert_file_count += 1
+                    output_data.valid_convert_file_count += 1
             elif result == RESULT_FAILED:
-                failed_convert_count += 1
+                output_data.failed_convert_count += 1
             elif result == RESULT_WEBP_LARGER:
-                skip_file_count += 1
+                output_data.skip_file_count += 1
             elif result == RESULT_WITH_TRANSPARENCY:
-                skip_transparency_file_count += 1
+                output_data.skip_transparency_file_count += 1
 
             if replace_origin:
                 if reduce_size > 0:
@@ -152,25 +215,3 @@ def main():
                     copyfile_safe(input_file_path, convert_fail_path, file_name)
                 elif result == RESULT_WEBP_LARGER:
                     copyfile_safe(input_file_path, keep_origin_path, file_name)
-
-    print '-----------------------------------------------'
-    print ' '
-    if replace_origin:
-        print colorize('Replace ' + valid_convert_file_count.__str__() + ' image files on ' + input_directory, fg=CYAN)
-    else:
-        print colorize('All files handled on: ', fg=CYAN) + output_directory
-
-    print colorize('Consume: ', fg=CYAN) + '%.3fs' % (time.time() - start_time)
-    print ' '
-    print colorize('Scan files count: ', fg=GREEN) + scan_file_count.__str__()
-    print colorize('Converted files count: ', fg=GREEN) + valid_convert_file_count.__str__()
-    print colorize('Reduce size: ', fg=GREEN) + human_bytes(all_reduce_size)
-    print colorize('Skip files(because convert failed) count: ',
-                   fg=GREEN) + failed_convert_count.__str__()
-    print colorize('Skip files(because the webp one is greater than origin one) count: ',
-                   fg=GREEN) + skip_file_count.__str__()
-    if skip_transparency_file_count > 0:
-        print colorize('Skip files(because there is transparency) count: ',
-                       fg=GREEN) + skip_transparency_file_count.__str__()
-    print ' '
-    print '-----------------------------------------------'

@@ -24,7 +24,7 @@ with open('README.md') as f:
 
 setup(
     name="webp-converter",
-    version="4.0.0",
+    version="4.0.1",
     packages=find_packages(exclude=['arts']),
 
     # Project uses reStructuredText, so ensure that the docutils get
