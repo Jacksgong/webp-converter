@@ -65,6 +65,21 @@ webpc -o=~/Downloads/test-converted/ ~/Downloads/img/test
 
 ![](https://github.com/Jacksgong/webp-converter/raw/master/arts/demo-4.png)
 
+## 我的终端的风格配置
+
+如果你想要适配和上面截图一样的终端风格，非常简单:
+
+- 首先，请使用[powerlevel9k](https://github.com/bhilburn/powerlevel9k)主题(正如Powerlevel9k文档提到的安装Powerlevel9k主题，并且安装Powerline字体).
+- 其次，请配置[iTerm2-Neutron](https://github.com/Ch4s3/iTerm2-Neutron)色系.
+- 最后, 请配置ini的shell(如果你使用的是zsh，只需要添加下列代码到`~/.zshrc`文件中):
+```
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
+POWERLEVEL9K_TIME_FORMAT="%D{%H:%M:%S}"
+POWERLEVEL9K_NODE_VERSION_BACKGROUND='022'
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
+```
+
 ## License
 
 ```
