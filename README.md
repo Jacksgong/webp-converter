@@ -22,8 +22,15 @@ You can use this tool to converter batch images(png/jpg) to webp and output size
 4. You can ignore all images which has transparency pixel if you want with `--ignore-transparency-image` config(the origin image of has-transparency-image will be copied to `/webp-converted/transparency` directory)
 5. Output convert result, like how much size reduces, how many files skip convert, etc...
 6. You can replace the images with converted-webp image automatically if you want with `replace: true` config
+## Development mode
+1 - Clone the repository, then:
+```bash
+cd webp-converted
+pip install -e . 
+```
 
-## Install
+## Installation
+- Required `webp`. download from [https://developers.google.com/speed/webp/docs/using](https://developers.google.com/speed/webp/docs/using) 
 
 ```shell
 brew install webp

@@ -23,20 +23,19 @@ from os.path import exists, join
 from shutil import rmtree
 from sys import exit
 
-from converter import Converter, RESULT_ALREADY_EXIST, RESULT_FAILED, RESULT_WEBP_LARGER, RESULT_WITH_TRANSPARENCY
-from helper import print_blue, resource_path, colorize, CYAN, GREEN, human_bytes, copyfile_safe, handle_home_case, \
+from webpc.converter import Converter, RESULT_ALREADY_EXIST, RESULT_FAILED, RESULT_WEBP_LARGER, RESULT_WITH_TRANSPARENCY
+from webpc.helper import print_blue, resource_path, colorize, CYAN, GREEN, human_bytes, copyfile_safe, handle_home_case, \
     print_warn
 
 __version__ = '4.0.1'
 __author__ = 'JacksGong'
 
 print("-------------------------------------------------------")
-print("               Webp Converter v" + __version__)
-print ""
-print "Thanks for using okcat! Now, the doc is available on: "
+print("               Webp Converter v" + __version__ )
+print("Thanks for using okcat! Now, the doc is available on: ")
 print_blue("      https://github.com/Jacksgong/webp-converter")
-print ""
-print "                      Have Fun!"
+print()
+print("                 Have Fun!")
 print("-------------------------------------------------------")
 
 
@@ -78,9 +77,11 @@ def main():
             " convert.")
 
     if replace_origin:
-        print 'origin images will be replace with webp images on ' + input_directory
+        print
+        'origin images will be replace with webp images on ' + input_directory
     else:
-        print 'origin images on ' + input_directory + ' will be converted to ' + output_directory
+        print
+        'origin images on ' + input_directory + ' will be converted to ' + output_directory
 
     command_prefix = '%s ' % resource_path('cwebp')
     if quality_ratio >= 100:
@@ -95,7 +96,8 @@ def main():
 
     if clean_env and exists(output_directory):
         rmtree(output_directory)
-        print "clear all env on " + output_directory
+        print
+        "clear all env on " + output_directory
 
     if not replace_origin and not exists(output_directory):
         makedirs(output_directory)
@@ -119,8 +121,10 @@ def main():
             output_data=output_data
         )
     except KeyboardInterrupt:
-        print ''
-        print 'INTERRUPT BY USER.'
+        print
+        ''
+        print
+        'INTERRUPT BY USER.'
         if exists(swap_webp_path):
             remove(swap_webp_path)
         pass
@@ -145,25 +149,38 @@ class OutputData:
         pass
 
     def dump(self, replace_origin, input_directory, output_directory, start_time):
-        print '-----------------------------------------------'
-        print ' '
+        print
+        '-----------------------------------------------'
+        print
+        ' '
         if replace_origin:
             colorize('Replace %s image files on %s' % (self.valid_convert_file_count, input_directory),
                      fg=CYAN)
         else:
-            print get_result('All files handled on: ', output_directory, fg=CYAN)
+            print
+            get_result('All files handled on: ', output_directory, fg=CYAN)
 
-        print get_result('Consume: ', (time.time() - start_time), _format='%s%.3fs', fg=CYAN)
-        print ' '
-        print get_result('Scan files count: ', self.scan_file_count)
-        print get_result('Converted files count: ', self.valid_convert_file_count)
-        print get_result('Reduce size: ', human_bytes(self.all_reduce_size))
-        print get_result('Skip files(because convert failed) count: ', self.failed_convert_count)
-        print get_result('Skip files(because the webp one is greater than origin one) count: ', self.skip_file_count)
+        print
+        get_result('Consume: ', (time.time() - start_time), _format='%s%.3fs', fg=CYAN)
+        print
+        ' '
+        print
+        get_result('Scan files count: ', self.scan_file_count)
+        print
+        get_result('Converted files count: ', self.valid_convert_file_count)
+        print
+        get_result('Reduce size: ', human_bytes(self.all_reduce_size))
+        print
+        get_result('Skip files(because convert failed) count: ', self.failed_convert_count)
+        print
+        get_result('Skip files(because the webp one is greater than origin one) count: ', self.skip_file_count)
         if self.skip_transparency_file_count > 0:
-            print get_result('Skip files(because there is transparency) count: ', self.skip_transparency_file_count)
-        print ' '
-        print '-----------------------------------------------'
+            print
+            get_result('Skip files(because there is transparency) count: ', self.skip_transparency_file_count)
+        print
+        ' '
+        print
+        '-----------------------------------------------'
 
 
 def get_result(title, message, _format='%s%s', fg=GREEN):
