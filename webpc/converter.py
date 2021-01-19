@@ -106,7 +106,7 @@ class Converter:
             return RESULT_FAILED, 0
 
         _reduce_size = size_diff(image_file_path, swap_webp_path)
-        if _reduce_size < 0:
+        if _reduce_size <= 0:
             # invalid convert
             print_process(
                 'NOT convert ' + image_file_name + ' because the webp one is larger: ' + (-_reduce_size).__str__())
