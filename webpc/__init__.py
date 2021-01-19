@@ -27,7 +27,7 @@ from converter import Converter, RESULT_ALREADY_EXIST, RESULT_FAILED, RESULT_WEB
 from helper import print_blue, resource_path, colorize, CYAN, GREEN, human_bytes, copyfile_safe, handle_home_case, \
     print_warn
 
-__version__ = '4.0.1'
+__version__ = '4.1.0'
 __author__ = 'JacksGong'
 
 print("-------------------------------------------------------")
@@ -57,6 +57,8 @@ def main():
                         help='Whether need to clean the output directory before convert images, default value is false')
     parser.add_argument('--debug', dest='debug', action='store_true',
                         help='Whether need to print debug message, default value is false')
+    parser.add_argument('--ignore-filename-match', dest='ignore_filename_match', default='',
+                        help='ignore file when the name contain the provide value(such as .9)')
 
     args = parser.parse_args()
 
@@ -69,6 +71,7 @@ def main():
     replace_origin = args.replace_origin
     clean_env = args.clear_env
     is_debug = args.debug
+    ignore_filename_match = args.ignore_filename_match
 
     if replace_origin and (clean_env or output_directory != default_output_directory):
         exit(
@@ -116,7 +119,8 @@ def main():
             ignore_transparency_image=ignore_transparency_image,
             is_debug=is_debug,
             replace_origin=replace_origin,
-            output_data=output_data
+            output_data=output_data,
+            ignore_filename_match=ignore_filename_match
         )
     except KeyboardInterrupt:
         print ''
@@ -129,7 +133,8 @@ def main():
         replace_origin=replace_origin,
         input_directory=input_directory,
         output_directory=output_directory,
-        start_time=start_time
+        start_time=start_time,
+        ignore_filename_match=ignore_filename_match
     )
 
 
@@ -140,11 +145,12 @@ class OutputData:
     scan_file_count = 0
     skip_file_count = 0
     skip_transparency_file_count = 0
+    skip_ignore_match_name_file_count = 0
 
     def __init__(self):
         pass
 
-    def dump(self, replace_origin, input_directory, output_directory, start_time):
+    def dump(self, replace_origin, input_directory, output_directory, start_time, ignore_filename_match):
         print '-----------------------------------------------'
         print ' '
         if replace_origin:
@@ -162,6 +168,9 @@ class OutputData:
         print get_result('Skip files(because the webp one is greater than origin one) count: ', self.skip_file_count)
         if self.skip_transparency_file_count > 0:
             print get_result('Skip files(because there is transparency) count: ', self.skip_transparency_file_count)
+        if self.skip_ignore_match_name_file_count > 0:
+            print get_result('Skip files(because their name contain %s) count: ' % ignore_filename_match,
+                             self.skip_ignore_match_name_file_count)
         print ' '
         print '-----------------------------------------------'
 
@@ -172,11 +181,16 @@ def get_result(title, message, _format='%s%s', fg=GREEN):
 
 def loop(input_directory, output_directory, swap_webp_path, transparency_image_path, quality_ratio, convert_fail_path,
          keep_origin_path, ignore_transparency_image, is_debug,
-         replace_origin, output_data):
+         replace_origin, output_data, ignore_filename_match):
     handler = Converter(swap_webp_path, quality_ratio)
     for subdir, dirs, files in os.walk(input_directory):
         for file_name in files:
             if file_name == '.DS_Store':
+                continue
+            if ignore_filename_match != '' and file_name.__contains__(ignore_filename_match):
+                if is_debug:
+                    print 'ignore %s because it contain %s' % (file_name, ignore_filename_match)
+                output_data.skip_ignore_match_name_file_count += 1
                 continue
             if not file_name.endswith('.jpg') and not file_name.endswith('.png'):
                 continue
