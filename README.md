@@ -5,7 +5,7 @@
 ![](https://img.shields.io/badge/license-Apache2-blue.svg)
 [![](https://img.shields.io/badge/readme-English-blue.svg)](https://github.com/Jacksgong/webp-converter)
 [![](https://img.shields.io/badge/readme-中文-blue.svg)](https://github.com/Jacksgong/webp-converter/blob/master/README-zh.md)
-[![](https://img.shields.io/badge/pip-v4.0.1%20webp--converter-yellow.svg)](https://pypi.python.org/pypi/webp-converter)
+[![](https://img.shields.io/badge/pip-v4.1.0%20webp--converter-yellow.svg)](https://pypi.python.org/pypi/webp-converter)
 
 An powerful webp batch converter and differ analytics tool.
 
@@ -60,6 +60,12 @@ If you just want to convert all images on the current folder and with **clean** 
 webpc --c --ignore-transparency-image -q=95
 ```
 ![](https://github.com/Jacksgong/webp-converter/raw/master/arts/demo-3.png)
+
+If you want to convert ignore filename contain the sepcial word, you can use `--ignore-filename-match`, the following demo is skip convert all files which name contains '.9':
+
+```shell
+webpc --r --ignore-filename-match='.9'
+```
 
 If you want to convert all **images on** `~/Downloads/img/test` folder and **output** converted result to `~/Downloads/test-converted` folder and only converted origin images when it isn't has **same name** `.webp` file on `~/Downloads/test-converted` folder(just not with `--c` argument) when it can be smaller after converted:
 

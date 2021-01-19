@@ -5,7 +5,7 @@
 ![](https://img.shields.io/badge/license-Apache2-blue.svg)
 [![](https://img.shields.io/badge/readme-English-blue.svg)](https://github.com/Jacksgong/webp-converter)
 [![](https://img.shields.io/badge/readme-中文-blue.svg)](https://github.com/Jacksgong/webp-converter/blob/master/README-zh.md)
-[![](https://img.shields.io/badge/pip-v4.0.1%20webp--converter-yellow.svg)](https://pypi.python.org/pypi/webp-converter)
+[![](https://img.shields.io/badge/pip-v4.1.0%20webp--converter-yellow.svg)](https://pypi.python.org/pypi/webp-converter)
 
 Webp批量定向转换与结果分析工具。
 
@@ -56,6 +56,11 @@ webpc --c --ignore-transparency-image -q=95
 ```
 ![](https://github.com/Jacksgong/webp-converter/raw/master/arts/demo-3.png)
 
+如果你想要转换过程中忽略一些包含特殊字符的文件，可以通过`--ignore-filename-match`来做到，以下案例就是忽略文件名包含`.9`的文件:
+
+```shell
+webpc --r --ignore-filename-match='.9'
+```
 
 如果你想要转换所有 **存储在** `~/Downloads/img/test`中的图片，并且 **输出** 目录指定为 `~/Downloads/test-converted`，并且仅仅转换在输出目录中 **不存在** 的图片，在转换后会变小的情况下:
 

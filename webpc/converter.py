@@ -20,7 +20,7 @@ import os
 from os import remove, rename
 from os.path import exists
 
-from helper import size_diff, print_process, resource_path
+from webpc.helper import size_diff, print_process, resource_path
 
 RESULT_SUCCESS = 0
 RESULT_FAILED = -1
@@ -93,7 +93,7 @@ class Converter:
 
         if is_debug:
             subprocess.Popen(command).communicate()
-            print command.__str__()
+            print(command.__str__())
         else:
             subprocess.Popen(command, stdout=FNULL, stderr=subprocess.STDOUT).communicate()
 

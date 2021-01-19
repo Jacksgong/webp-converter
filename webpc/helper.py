@@ -39,11 +39,11 @@ def handle_home_case(path):
 
 
 def print_blue(msg):
-    print colorize(msg, fg=BLUE)
+    print(colorize(msg, fg=BLUE))
 
 
 def print_warn(msg):
-    print colorize(msg, fg=YELLOW)
+    print(colorize(msg, fg=YELLOW))
 
 
 def termcolor(fg=None, bg=None):
@@ -58,7 +58,7 @@ def colorize(message, fg=None, bg=None):
 
 
 def print_process(message):
-    print colorize(message, fg=YELLOW)
+    print(colorize(message, fg=YELLOW))
 
 
 def size_diff(left, right):

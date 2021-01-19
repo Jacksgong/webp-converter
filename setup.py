@@ -24,7 +24,7 @@ with open('README.md') as f:
 
 setup(
     name="webp-converter",
-    version="4.0.1",
+    version="4.1.0",
     packages=find_packages(exclude=['arts']),
 
     # Project uses reStructuredText, so ensure that the docutils get
@@ -35,7 +35,7 @@ setup(
     author="Jacksgong",
     author_email="igzhenjie@gmail.com",
     description="An powerful webp batch converter and differ analytics",
-    long_description=long_description,
+    long_description="more detail please move to https://github.com/Jacksgong/webp-converter.",
     license="Apache2",
     keywords="webp converter",
     url="https://github.com/Jacksgong/webp-converter",
